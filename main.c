@@ -6,11 +6,14 @@
 /*   By: mfebvay <mfebvay@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/02 18:55:30 by mfebvay           #+#    #+#             */
-/*   Updated: 2015/02/03 00:42:45 by mfebvay          ###   ########.fr       */
+/*   Updated: 2015/02/03 17:38:50 by mfebvay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <string.h>
 
 static void test01(void)
@@ -140,11 +143,23 @@ static void test04(void)
 	ft_putendl("");
 }
 
+void	test_very_empty(void)
+{
+	int	fd;
+	char	*line;
+
+	printf("TEST VERY EMPTY\n");
+	printf("open ret : %d\n", (fd = open("./veryempty", O_RDONLY)));
+	printf("gnl ret : %d\n", get_next_line(fd, &line));
+	printf("line : %s\n", line);
+}
+
 int		main(void)
 {
-	test01();
-	test02();
-	test03();
-	test04();
+//	test01();
+//	test02();
+//	test03();
+//	test04();
+	test_very_empty();
 	return (0);
 }
