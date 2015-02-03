@@ -6,7 +6,7 @@
 /*   By: mfebvay <mfebvay@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/02 18:27:34 by mfebvay           #+#    #+#             */
-/*   Updated: 2015/02/02 20:24:10 by mfebvay          ###   ########.fr       */
+/*   Updated: 2015/02/03 01:42:41 by mfebvay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,13 @@ static int		store_line(t_list **lst, char **buf)
 	int		line_end;
 
 	i = 0;
-	while ((*buf)[i] && (*buf)[i] != '\n')
+	line_end = 0;
+	while (buf[0][i] && buf[0][i] != '\n')
 		i++;
 	tmp = ft_strsub(*buf, 0, i);
 	ft_lstpushback(lst, ft_lstnew(tmp, i + 1));
 	free(tmp);
-	if ((*buf)[i] == '\n')
+	if (buf[0][i] == '\n')
 	{
 		i++;
 		line_end = 1;
@@ -66,26 +67,27 @@ static int		build_line(char **line, char **buf, int const fd)
 	line_end = 0;
 	read_ret = 1;
 	line_bits = NULL;
-	while (!line_end && read_ret > 0)
+	while (!line_end && read_ret)
 	{
 		if (!(**buf))
 			read_ret = read(fd, *buf, BUFF_SIZE);
+		if (read_ret == -1)
+			return (read_ret);
 		line_end = store_line(&line_bits, buf);
 	}
-	if (read_ret == -1 || read_ret == 0)
-		return (read_ret);
 	cat_line(&line_bits, line);
-	return (1);
+	return (read_ret > 0);
 }
 
-static t_buf	*new_buf(t_list **buf_list, int const fd)
+static t_list	*new_buf(t_list *buf_list, t_buf **buf, int const fd)
 {
 	t_buf	tmp;
 
 	tmp.fd = fd;
 	tmp.content = ft_memalloc(sizeof(char) * (BUFF_SIZE + 1));
-	ft_lstadd(buf_list, ft_lstnew(&tmp, sizeof(t_buf)));
-	return ((*buf_list)->content);
+	ft_lstadd(&buf_list, ft_lstnew(&tmp, sizeof(t_buf)));
+	*buf = buf_list->content;
+	return (buf_list);
 }
 
 int				get_next_line(int const fd, char **line)
@@ -105,6 +107,6 @@ int				get_next_line(int const fd, char **line)
 		current = current->next;
 	}
 	if (!current)
-		buf = new_buf(&buf_list, fd);
+		buf_list = new_buf(buf_list, &buf, fd);
 	return (build_line(line, &buf->content, fd));
 }

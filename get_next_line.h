@@ -6,7 +6,7 @@
 /*   By: mfebvay <mfebvay@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/02 18:47:52 by mfebvay           #+#    #+#             */
-/*   Updated: 2015/02/02 20:07:34 by mfebvay          ###   ########.fr       */
+/*   Updated: 2015/02/02 23:32:20 by mfebvay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 
 # include <libft.h>
 # include <stdlib.h>
+# include <stdio.h>
 # include <sys/types.h>
 # include <sys/uio.h>
 # include <unistd.h>
 
-# define BUFF_SIZE 32
+# define BUFF_SIZE 16
 
 typedef struct		s_buf
 {
